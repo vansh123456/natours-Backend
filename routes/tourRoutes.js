@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const tourController = require('./../controllers/tourController.js');
 
-router.param('id', tourController.checkID); //=> { //here parameter is the id,and it would run for the id only!
+//router.param('id', tourController.checkID); //=> { //here parameter is the id,and it would run for the id only!
 // console.log(`tour id is ${val}`); //here val will hold the value of id
 //next();
 //});
