@@ -23,18 +23,40 @@ const Tour = require('./../models/tourModel.js');
 //     next();
 // }
 
-exports.getallTours = (req,res)=> {  //api/v1/tours is the pathname for the directory
+exports.getallTours = async (req,res)=> {  //api/v1/tours is the pathname for the directory
+    try {
+    const tours = await Tour.find();
+    //.find when not given any param,shows all the available tours
     res.status(200).json({
         status: "success", 
-        // data: { //data is the property which would contain the data
-        //     tours:tours //tours const wala tours api(api.get) wale main humlog daalrhe hain
-        // }
+        result: tours.length,
+         data: { //data is the property which would contain the data
+             tours:tours //tours const wala tours api(api.get) wale main humlog daalrhe hain
+         }
     })
+  }
+  catch(err) {
+    res.status(404).json({
+        status: 'fail',
+        message: err
+    })
+  }
 };
-exports.getTour = (req,res)=> { //here :id is the variable name for the unique id
+exports.getTour = async (req,res)=> {
+    try{
+        await Tour.findById(req.params.id);
+        //Tour.findOne({_id: req.params.id}) this is what mongoose does on the backside!
+    }
+    catch(err){
+        res.status(404).json({
+        status:'fail',
+        message : err    
+        })
+    }
+    //here :id is the variable name for the unique id
     // we will send the unique id via postman!
-    console.log(req.params);  //{ id: '5' } returned in output!
-    const id = req.params.id *1 //multiply string with number makes it the number
+    //console.log(req.params);  //{ id: '5' } returned in output!
+    //const id = req.params.id *1 //multiply string with number makes it the number
     // const tour = tours.find(el => {
     //     return (el.id === id);
     // })
