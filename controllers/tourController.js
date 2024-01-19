@@ -13,14 +13,15 @@ const Tour = require('./../models/tourModel.js');
 //     }
 //     next(); //taaki pipeline is maintained!
 // };
-exports.middlewarecheckBody = (req, res, next) => {
-    if(!req.body.name || req.body.price)
-    return res.status(400).json({
-        status: 'fail',
-        message: 'missing name or price'
-    }) 
-    next();
-}
+//mongoose model will take care of it now!
+// exports.middlewarecheckBody = (req, res, next) => {
+//     if(!req.body.name || req.body.price)
+//     return res.status(400).json({
+//         status: 'fail',
+//         message: 'missing name or price'
+//     }) 
+//     next();
+// }
 
 exports.getallTours = (req,res)=> {  //api/v1/tours is the pathname for the directory
     res.status(200).json({
@@ -51,13 +52,26 @@ exports.getTour = (req,res)=> { //here :id is the variable name for the unique i
     // })
 };
 
-exports.createTours = (req,res) => { //for POST requests the req part should contain some data for that we use middlewares in express!
+exports.createTours = async (req,res) => { //for POST requests the req part should contain some data for that we use middlewares in express!
+    try{
+    //const newTour = new Tour({});
+    //newTour.save(); //long way of saving,making a new document and saving on that
+
+    const newTour = await Tour.create(req.body);
+    
     res.status(201).json({
         status: 'success',
         data: {
             tour: newTour,
         }
     })
+  }
+  catch(err) {
+    res.status(400).json({
+        status: 'fail',
+        message: 'invalid data sent' //err
+    })
+  }
 };
 exports.updateTour = (req,res) => {
     // if(req.params.id *1 > tours.length) {

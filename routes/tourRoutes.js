@@ -10,7 +10,7 @@ const tourController = require('./../controllers/tourController.js');
 router
   .route('/') //base home adress ko get karrhe hain humlog tho
   .get(tourController.getallTours) //aaand now all the function calls are coming into the tourController so we do tourcontroller.getallTours and stuff
-  .post(tourController.middlewarecheckBody,tourController.createTours); //here is how you chain the middleware,agar middleware wala chala then only  createtour chalega
+  .post(tourController.createTours); //here is how you chain the middleware,agar middleware wala chala then only  createtour chalega
 router
     .route('/:id')
     .get(tourController.getTour)
