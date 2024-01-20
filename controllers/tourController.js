@@ -95,27 +95,47 @@ exports.createTours = async (req,res) => { //for POST requests the req part shou
     })
   }
 };
-exports.updateTour = (req,res) => {
+exports.updateTour = async (req,res) => {
     // if(req.params.id *1 > tours.length) {
     //     return res.status(404).json({
     //         status:'failed',
     //         message: 'Invalid id'
     //     })
     // }
-    
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: 'updated tour here...'
+    try {
+        await Tour.findByIdAndUpdate(req.params.id,req.body,{
+            new: true,
+        });
+        res.status(200).json({
+            status: 'success',
+            data: {
+                tour: 'updated tour here...'
+            }
+        })
+        }   
+        catch(err){
+            res.status(404).json({
+                status: 'fail',
+                message: err
+            })
         }
-    })
-}
-exports.deleteTour = (req,res) => {
+    }
     
+exports.deleteTour = async (req,res) => {
+    
+    try{
+        await Tour.findOneAndDelete(req.params.id) //in RESTfull API,practice is to not send any data to client when delete operation is called.
         res.status(204).json({
             status: 'success',
             data: {
-                tour: null
+                tour: 'Tour has been deleted'
             }
         })
+    }
+    catch(err){
+        res.status(404).json({
+            status: 'fail',
+            message: err
+        })
+    }
 }
